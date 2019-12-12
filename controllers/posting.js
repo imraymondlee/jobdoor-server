@@ -33,9 +33,20 @@ exports.read = (req, res) => {
     return;
   }
 
-  Posting.find({}, {}, query).then((data) => {
-    res.send(data);
-  }, (err) => {
-    res.status(400).send(err);
+  Posting.countDocuments({}, (err, totalCount) => {
+    if(err) {
+      res.status(400).send(err);
+      return;
+    }
+
+    Posting.find({}, {}, query).then((data) => {
+      let totalPages = Math.ceil(totalCount / size)
+      res.send({
+        data,
+        totalPages
+      });
+    }, (err) => {
+      res.status(400).send(err);
+    });
   });
 };
