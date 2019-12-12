@@ -21,12 +21,45 @@ exports.create = (req, res) => {
 };
 
 exports.read = (req, res) => {
+  // Search fields
+  let search;
+  let position = req.query.position;
+  let location = req.query.location;
+
+  // Pagination
   let pageNum = parseInt(req.query.pageNum);
   let size = parseInt(req.query.size);
   let query = {
     skip: size * (pageNum - 1),
     limit: size
   };
+
+
+  // Not searching
+  if(!position && !location) {
+    search = {};
+  // Position search
+  } else if(position && !location) {
+    console.log("Position search");
+    search = {
+      position: {$regex: position, $options: 'i'}
+    };
+  // Location search
+  } else if (location && !position) {
+    console.log("Location search");
+    search = {
+      location: {$regex: location, $options: 'i'}
+    };
+  // Position and Location search
+  } else {
+    console.log("Position and Location search");
+    search = {
+      "$and": [
+        { position: {$regex: position, $options: 'i'} },
+        { location: {$regex: location, $options: 'i'} }
+      ]
+    }
+  }
 
   if(pageNum <= 0) {
     res.status(400).send("Invalid page number");
@@ -39,8 +72,8 @@ exports.read = (req, res) => {
       return;
     }
 
-    Posting.find({}, {}, query).then((data) => {
-      let totalPages = Math.ceil(totalCount / size)
+    Posting.find(search, {}, query).then((data) => {
+      let totalPages = Math.ceil(totalCount / size);
       res.send({
         data,
         totalPages
