@@ -21,7 +21,19 @@ exports.create = (req, res) => {
 };
 
 exports.read = (req, res) => {
-  Posting.find({}).then((data) => {
+  let pageNum = parseInt(req.query.pageNum);
+  let size = parseInt(req.query.size);
+  let query = {
+    skip: size * (pageNum - 1),
+    limit: size
+  };
+
+  if(pageNum <= 0) {
+    res.status(400).send("Invalid page number");
+    return;
+  }
+
+  Posting.find({}, {}, query).then((data) => {
     res.send(data);
   }, (err) => {
     res.status(400).send(err);
