@@ -27,10 +27,10 @@ exports.read = (req, res) => {
   let location = req.query.location;
 
   // Pagination
-  let pageNum = parseInt(req.query.pageNum);
-  let size = parseInt(req.query.size);
+  let page = parseInt(req.query.page);
+  let size = 3;
   let query = {
-    skip: size * (pageNum - 1),
+    skip: size * (page - 1),
     limit: size
   };
 
@@ -61,12 +61,12 @@ exports.read = (req, res) => {
     }
   }
 
-  if(pageNum <= 0) {
+  if(page <= 0) {
     res.status(400).send("Invalid page number");
     return;
   }
 
-  Posting.countDocuments({}, (err, totalCount) => {
+  Posting.countDocuments(search, (err, totalCount) => {
     if(err) {
       res.status(400).send(err);
       return;
