@@ -7,6 +7,7 @@ exports.helloWorld = (req, res) => {
 
 exports.create = (req, res) => {
   let posting = new Posting ({
+    userId: req.userId,
     position: req.body.position,
     company: req.body.company,
     location: req.body.location,

@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const postingSchema = new Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
   position: {
     type: String,
   },

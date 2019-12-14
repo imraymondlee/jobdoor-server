@@ -45,7 +45,7 @@ app.get('/', posting.helloWorld);
 app.post('/user/register', user.register);
 app.post('/user/login', user.login);
 
-app.post('/posting', posting.create);
+app.post('/posting', verifyToken, posting.create);
 app.get('/posting', posting.read);
 
 app.get('/posting/my-postings', verifyToken, posting.myPostings);
