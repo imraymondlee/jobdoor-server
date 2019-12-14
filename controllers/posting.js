@@ -83,3 +83,7 @@ exports.read = (req, res) => {
     });
   });
 };
+
+exports.myPostings = (req, res) => {
+  res.send('My Postings Response');
+};
