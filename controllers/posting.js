@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Posting = require('../models/posting');
 
 exports.helloWorld = (req, res) => {
@@ -85,8 +86,9 @@ exports.read = (req, res) => {
 };
 
 exports.myPostings = (req, res) => {
-  let data = {
-    data: 'asdfasdfsa'
-  }
-  res.send(data);
+  Posting.find({ userId: mongoose.Types.ObjectId(req.userId) }).then((data) => {
+    res.send(data);
+  }, (err) => {
+    res.status(400).send(err);
+  });
 };

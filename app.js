@@ -22,7 +22,7 @@ mongoose.connect(process.env.DB_URL, {
   }
 );
 
-// Middleware 
+// Token Middleware 
 verifyToken = (req, res, next) => {
   if(!req.headers.authorization) {
     return res.status(401).send('Unauthorized request');
@@ -35,6 +35,7 @@ verifyToken = (req, res, next) => {
   if(!payload) {
     return res.status(401).send('Unauthorized request');
   }
+  // Grab user ID from the payload
   req.userId = payload.subject;
   next();
 }
