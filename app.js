@@ -23,7 +23,7 @@ mongoose.connect(process.env.DB_URL, {
    
 app.get('/', posting.helloWorld);
 
-app.post('/user/register', user.create);
+app.post('/user/register', user.register);
 app.post('/user/login', user.login);
 
 app.post('/posting', posting.create);

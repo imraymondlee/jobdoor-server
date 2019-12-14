@@ -1,13 +1,16 @@
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
-exports.create = (req, res) => {
+exports.register = (req, res) => {
   let user = new User ({
     email: req.body.email,
     password: req.body.password,
   });
 
   user.save().then((data) => {
-    res.send(data);
+    let payload = { subject: data._id };
+    let token = jwt.sign(payload, 'secretKey123');
+    res.send({token});
   }, (err) => {
     res.status(400).send(err);
   });
@@ -25,7 +28,9 @@ exports.login = (req, res) => {
       if(data.password !== password) {
         res.status(401).send('Invalid password');
       } else {
-        res.status(200).send(data);
+        let payload = { subject: data._id };
+        let token = jwt.sign(payload, 'secretKey123');
+        res.status(200).send({token});
       }
     }
 
