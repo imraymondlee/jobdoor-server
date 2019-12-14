@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const posting = require('./controllers/posting');
+const user = require('./controllers/user');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -21,6 +22,9 @@ mongoose.connect(process.env.DB_URL, {
 );
    
 app.get('/', posting.helloWorld);
+
+app.post('/user/register', user.create);
+app.post('/user/login', user.login);
 
 app.post('/posting', posting.create);
 app.get('/posting', posting.read);
