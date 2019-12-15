@@ -86,6 +86,14 @@ exports.read = (req, res) => {
   });
 };
 
+exports.myPostings = (req, res) => {
+  Posting.find({ userId: mongoose.Types.ObjectId(req.userId) }).then((data) => {
+    res.send(data);
+  }, (err) => {
+    res.status(400).send(err);
+  });
+};
+
 exports.readSingle = (req, res) => {
   Posting.find({ _id: mongoose.Types.ObjectId(req.params.id) }).then((data) => {
     // Check if the posting is by the requested user
@@ -99,10 +107,19 @@ exports.readSingle = (req, res) => {
   });
 };
 
-exports.myPostings = (req, res) => {
-  Posting.find({ userId: mongoose.Types.ObjectId(req.userId) }).then((data) => {
+exports.updateSingle = (req, res) => {
+  let updatedData = {
+    userId: req.userId,
+    position: req.body.position,
+    company: req.body.company,
+    location: req.body.location,
+    url: req.body.url,
+    datePosted: req.body.datePosted
+  };
+
+  Posting.findOneAndUpdate({ _id: mongoose.Types.ObjectId(req.params.id), userId: req.userId }, updatedData).then((data) => {
     res.send(data);
   }, (err) => {
     res.status(400).send(err);
   });
-};
+}

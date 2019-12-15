@@ -49,6 +49,7 @@ app.post('/posting', verifyToken, posting.create);
 app.get('/posting', posting.read);
 
 app.get('/posting/single/:id', verifyToken, posting.readSingle);
+app.put('/posting/single/:id', verifyToken, posting.updateSingle);
 
 app.get('/posting/my-postings', verifyToken, posting.myPostings);
  
