@@ -48,6 +48,8 @@ app.post('/user/login', user.login);
 app.post('/posting', verifyToken, posting.create);
 app.get('/posting', posting.read);
 
+app.get('/posting/single/:id', verifyToken, posting.readSingle);
+
 app.get('/posting/my-postings', verifyToken, posting.myPostings);
  
 let port = 4000;

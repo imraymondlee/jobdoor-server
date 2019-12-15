@@ -86,6 +86,19 @@ exports.read = (req, res) => {
   });
 };
 
+exports.readSingle = (req, res) => {
+  Posting.find({ _id: mongoose.Types.ObjectId(req.params.id) }).then((data) => {
+    // Check if the posting is by the requested user
+    if(data[0].userId === req.userId) {
+      res.send(data);
+    } else {
+      return res.status(401).send('Unauthorized request');
+    }
+  }, (err) => {
+    res.status(400).send(err);
+  });
+};
+
 exports.myPostings = (req, res) => {
   Posting.find({ userId: mongoose.Types.ObjectId(req.userId) }).then((data) => {
     res.send(data);
