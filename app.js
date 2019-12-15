@@ -50,6 +50,7 @@ app.get('/posting', posting.read);
 
 app.get('/posting/single/:id', verifyToken, posting.readSingle);
 app.put('/posting/single/:id', verifyToken, posting.updateSingle);
+app.delete('/posting/:id', verifyToken, posting.deletePosting);
 
 app.get('/posting/my-postings', verifyToken, posting.myPostings);
  

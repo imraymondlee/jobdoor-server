@@ -97,7 +97,7 @@ exports.myPostings = (req, res) => {
 exports.readSingle = (req, res) => {
   Posting.find({ _id: mongoose.Types.ObjectId(req.params.id) }).then((data) => {
     // Check if the posting is by the requested user
-    if(data[0].userId === req.userId) {
+    if(data[0].userId == req.userId) {
       res.send(data);
     } else {
       return res.status(401).send('Unauthorized request');
@@ -119,6 +119,14 @@ exports.updateSingle = (req, res) => {
 
   Posting.findOneAndUpdate({ _id: mongoose.Types.ObjectId(req.params.id), userId: req.userId }, updatedData).then((data) => {
     res.send(data);
+  }, (err) => {
+    res.status(400).send(err);
+  });
+}
+
+exports.deletePosting = (req, res) => {
+  Posting.deleteOne({ _id: mongoose.Types.ObjectId(req.params.id), userId: req.userId }).then((data) => {
+    res.status(200).send(data);
   }, (err) => {
     res.status(400).send(err);
   });
