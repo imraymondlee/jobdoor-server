@@ -9,7 +9,8 @@ exports.register = (req, res) => {
 
   user.save().then((data) => {
     let payload = { subject: data._id };
-    let token = jwt.sign(payload, 'secretKey123');
+    let token = jwt.sign(payload, process.env.JWT_KEY);
+    console.log(process.env.JWT_KEY);
     res.send({token});
   }, (err) => {
     res.status(400).send(err);
@@ -29,7 +30,7 @@ exports.login = (req, res) => {
         res.status(401).send('Invalid password');
       } else {
         let payload = { subject: data._id };
-        let token = jwt.sign(payload, 'secretKey123');
+        let token = jwt.sign(payload, process.env.JWT_KEY);
         res.status(200).send({token});
       }
     }

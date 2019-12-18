@@ -31,7 +31,7 @@ verifyToken = (req, res, next) => {
   if(token === 'null') {
     return res.status(401).send('Unauthorized request');
   }
-  let payload = jwt.verify(token, 'secretKey123');
+  let payload = jwt.verify(token, process.env.JWT_KEY);
   if(!payload) {
     return res.status(401).send('Unauthorized request');
   }
