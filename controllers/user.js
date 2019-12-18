@@ -1,16 +1,13 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
+// Salt rounds for bcrypt
 const saltRounds = 10;
-
-const myPlaintextPassword = 's0/\/\P4$$w0rD';
-const someOtherPlaintextPassword = 'not_bacon';
 
 exports.register = (req, res) => {
   // Hash password
-  bcrypt.genSalt(saltRounds, function(err, salt) {
-    bcrypt.hash(req.body.password, salt, function(err, hash) {
+  bcrypt.genSalt(saltRounds, (err, salt) => {
+    bcrypt.hash(req.body.password, salt, (err, hash) => {
       let user = new User ({
         email: req.body.email,
         password: hash,
@@ -19,7 +16,6 @@ exports.register = (req, res) => {
       user.save().then((data) => {
         let payload = { subject: data._id };
         let token = jwt.sign(payload, process.env.JWT_KEY);
-        console.log(process.env.JWT_KEY);
         res.send({token});
       }, (err) => {
         res.status(400).send(err);
@@ -37,7 +33,7 @@ exports.login = (req, res) => {
       res.status(401).send('Invalid email');
     } else {
       // Verify hashed password
-      bcrypt.compare(password, data.password, function(err, result) {
+      bcrypt.compare(password, data.password, (err, result) => {
         if(result) {
           let payload = { subject: data._id };
           let token = jwt.sign(payload, process.env.JWT_KEY);
@@ -47,7 +43,6 @@ exports.login = (req, res) => {
         }
       });
     }
-
   }, (err) => {
     res.status(400).send(err);
   });
