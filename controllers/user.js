@@ -8,26 +8,24 @@ const myPlaintextPassword = 's0/\/\P4$$w0rD';
 const someOtherPlaintextPassword = 'not_bacon';
 
 exports.register = (req, res) => {
+  // Hash password
   bcrypt.genSalt(saltRounds, function(err, salt) {
-      bcrypt.hash(req.body.password, salt, function(err, hash) {
-
-        let user = new User ({
-          email: req.body.email,
-          password: hash,
-        });
-
-        user.save().then((data) => {
-          let payload = { subject: data._id };
-          let token = jwt.sign(payload, process.env.JWT_KEY);
-          console.log(process.env.JWT_KEY);
-          res.send({token});
-        }, (err) => {
-          res.status(400).send(err);
-        });
+    bcrypt.hash(req.body.password, salt, function(err, hash) {
+      let user = new User ({
+        email: req.body.email,
+        password: hash,
       });
+      // Insert new user into db
+      user.save().then((data) => {
+        let payload = { subject: data._id };
+        let token = jwt.sign(payload, process.env.JWT_KEY);
+        console.log(process.env.JWT_KEY);
+        res.send({token});
+      }, (err) => {
+        res.status(400).send(err);
+      });
+    });
   });
-
-
 };
 
 exports.login = (req, res) => {
@@ -38,6 +36,7 @@ exports.login = (req, res) => {
     if(!data) {
       res.status(401).send('Invalid email');
     } else {
+      // Verify hashed password
       bcrypt.compare(password, data.password, function(err, result) {
         if(result) {
           let payload = { subject: data._id };
