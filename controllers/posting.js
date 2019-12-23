@@ -30,7 +30,7 @@ exports.read = (req, res) => {
 
   // Pagination
   let page = parseInt(req.query.page);
-  let size = 10;
+  let size = 5;
   let query = {
     skip: size * (page - 1),
     limit: size
