@@ -16,7 +16,7 @@ exports.register = (req, res) => {
       user.save().then((data) => {
         let payload = { subject: data._id };
         let token = jwt.sign(payload, process.env.JWT_KEY);
-        res.send({token});
+        res.status(201).send({token});
       }, (err) => {
         res.status(400).send(err);
       });

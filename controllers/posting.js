@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Posting = require('../models/posting');
 
 exports.helloWorld = (req, res) => {
-  res.send('Hello World!');
+  res.status(200).send('Hello World!');
 };
 
 exports.create = (req, res) => {
@@ -16,7 +16,7 @@ exports.create = (req, res) => {
   });
 
   posting.save().then((data) => {
-    res.send(data);
+    res.status(201).send(data);
   }, (err) => {
     res.status(400).send(err);
   });
@@ -76,7 +76,7 @@ exports.read = (req, res) => {
 
     Posting.find(search, {}, query).then((data) => {
       let totalPages = Math.ceil(totalCount / size);
-      res.send({
+      res.status(200).send({
         data,
         totalPages
       });
@@ -96,7 +96,7 @@ exports.myPostings = (req, res) => {
 
 exports.readSingle = (req, res) => {
   Posting.find({ _id: mongoose.Types.ObjectId(req.params.id), userId: req.userId }).then((data) => {
-    res.send(data);
+    res.status(200).send(data);
   }, (err) => {
     res.status(400).send(err);
   });
@@ -113,7 +113,7 @@ exports.updateSingle = (req, res) => {
   };
 
   Posting.findOneAndUpdate({ _id: mongoose.Types.ObjectId(req.params.id), userId: req.userId }, updatedData).then((data) => {
-    res.send(data);
+    res.status(200).send(data);
   }, (err) => {
     res.status(400).send(err);
   });
