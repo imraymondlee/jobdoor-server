@@ -54,7 +54,7 @@ app.delete('/posting/:id', verifyToken, posting.deletePosting);
 
 app.get('/posting/my-postings', verifyToken, posting.myPostings);
  
-let port = 4000;
+let port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`Now listening on port ${port}`);
 });
